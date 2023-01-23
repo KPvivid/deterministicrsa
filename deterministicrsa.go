@@ -75,8 +75,6 @@ func Prime(rand io.Reader, bits int) (*big.Int, error) {
 		return nil, errors.New("crypto/rand: prime size must be at least 2-bit")
 	}
 
-	randutil.MaybeReadByte(rand)
-
 	b := uint(bits % 8)
 	if b == 0 {
 		b = 8
@@ -109,7 +107,7 @@ func Prime(rand io.Reader, bits int) (*big.Int, error) {
 		bytes[len(bytes)-1] |= 1
 
 		p.SetBytes(bytes)
-		if p.ProbablyPrime(20) {
+		if p.ProbablyPrime(20) && p.BitLen() == bits {
 			return p, nil
 		}
 	}
